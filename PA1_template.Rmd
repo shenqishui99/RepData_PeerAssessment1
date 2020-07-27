@@ -10,8 +10,8 @@ output:
 library(dplyr)
 library(ggplot2)
 data <- read.csv("activity.csv")
-head(data)
 complete_data <- na.omit(data)
+head(data)
 ```
 
 

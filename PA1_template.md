@@ -31,6 +31,7 @@ library(dplyr)
 ```r
 library(ggplot2)
 data <- read.csv("activity.csv")
+complete_data <- na.omit(data)
 head(data)
 ```
 
@@ -42,10 +43,6 @@ head(data)
 ## 4    NA 2012-10-01       15
 ## 5    NA 2012-10-01       20
 ## 6    NA 2012-10-01       25
-```
-
-```r
-complete_data <- na.omit(data)
 ```
 
 
