@@ -4,32 +4,52 @@ output:
   html_document:
     keep_md: true
 ---
-echo = TRUE
 
+```{r, echo=TRUE}
 ## Loading and preprocessing the data
 library(dplyr)
 library(ggplot2)
 data <- read.csv("activity.csv")
 head(data)
 complete_data <- na.omit(data)
+```
 
+
+
+```{r, echo=TRUE}
 ## What is mean total number of steps taken per day?
 sum(complete_data$steps)
 hist(complete_data$steps)
+```
+
+
+```{r, echo=TRUE}
 steps.mean <- mean(complete_data$steps)
 steps.median <- median(complete_data$steps)
+steps.mean
+steps.median
+```
 
+
+```{r, echo=TRUE}
 ## What is the average daily activity pattern?
 act.patt <- group_by(complete_data, interval)
 act.patt <- summarize(act.patt, steps=mean(steps))
 
 #Time series plot
 ggplot(act.patt, aes(interval, steps)) + geom_line()
+```
 
+```{r, echo=TRUE}
 #Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 act.patt[act.patt$steps == max(act.patt$steps),]
 #835th interval
+```
 
+
+
+
+```{r, echo=TRUE}
 ## Imputing missing values
 #number of missing values
 nrow(data)-nrow(complete_data)
@@ -43,21 +63,29 @@ summary(data.new)
 data.new <- group_by(data.new, date)
 data.new <- summarize(data.new, steps=sum(steps))
 hist(data.new$steps)
+```
 
+
+```{r, echo=TRUE}
 #Calculate mean and median
 mean(data.new$steps)
 median(data.new$steps)
+```
 
+
+
+```{r, echo=TRUE}
 ## Are there differences in activity patterns between weekdays and weekends?
+data.new <- data
+data.new$steps[is.na(data.new$steps)] <- steps.mean 
 data.new$dayofweek <- weekdays(as.Date(data.new$date))
 data.new$weekend <-as.factor(data.new$dayofweek=="Saturday"|data.new$dayofweek=="Sunday")
 levels(data.new$weekend) <- c("Weekday", "Weekend")
-
 
 meansteps <- data.new %>% 
             group_by(interval,weekend) %>% 
             summarise(average = mean(steps))
 
 qplot(interval,average,data=meansteps,geom="line",facets=weekend~.,xlab="5-minute interval",ylab="average number of steps",main="Average steps pattern between Weekday and Weekend")
-
+```
 
